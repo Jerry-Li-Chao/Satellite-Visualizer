@@ -1,41 +1,3 @@
-// import React, { useRef } from 'react';
-// import { Canvas, useFrame, extend } from '@react-three/fiber';
-// import { TextureLoader } from 'three';
-// import { Sphere, useTexture, OrbitControls } from '@react-three/drei';
-// import { useLoader } from '@react-three/fiber';
-
-// // Import the Earth texture from the local directory
-// import earthTexture from './earth.jpg';
-
-// // Extend OrbitControls (necessary for drei v7+ if using TypeScript, optional in JS)
-// extend({ OrbitControls });
-
-// const Earth = () => {
-//   const earthRef = useRef();
-//   // Load the Earth texture
-//   const colorMap = useTexture(earthTexture);
-
-//   return (
-//     <Sphere ref={earthRef} args={[3, 32, 32]}>
-//       <meshStandardMaterial map={colorMap} />
-//     </Sphere>
-//   );
-// };
-
-// const EarthMap = () => {
-//   return (
-//     <Canvas>
-//       <ambientLight intensity={10.5} />
-//       <pointLight position={[10, 10, 10]} />
-//       <Earth />
-//       <OrbitControls enableZoom={false} />
-//     </Canvas>
-//   );
-// };
-
-// export default EarthMap;
-
-
 import React, { useMemo, useState } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { Sphere, useTexture, OrbitControls, Html } from '@react-three/drei';
@@ -54,6 +16,7 @@ const generateSatellitePositions = (radius, count) => {
     const y = radius * Math.sin(phi) * Math.sin(theta);
     const z = radius * Math.cos(phi);
     positions.push([x, y, z]);
+    console.log([x, y, z])
   }
   return positions;
 };
@@ -72,10 +35,26 @@ const Earth = () => {
       <Sphere args={[1, 32, 32]}>
         <meshStandardMaterial map={colorMap} />
       </Sphere>
+
       {/* Satellites */}
       {satellitePositions.map((pos, idx) => (
-        <Satellite key={idx} position={pos} id={idx} onHover={setHoveredSatellite} />
+        <Satellite
+          key={idx}
+          position={pos}
+          id={idx}
+          onHover={setHoveredSatellite}
+          useCustomModel={false}
+        />
       ))}
+
+        <Satellite
+          key={999}
+          position={[-0.7847662993282591, 0.22492340109848052, -0.8795176627430067]}
+          id={999}
+          onHover={setHoveredSatellite}
+          useCustomModel={true}
+        />
+
       {/* Info Box for Hovered Satellite */}
       {hoveredSatellite && (
         <Html position={hoveredSatellite.position} center>
